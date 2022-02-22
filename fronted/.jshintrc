@@ -1,0 +1,18 @@
+{
+    "globals": {
+        "$": true,
+        "require": true,
+        "FastClick": true
+    },
+    "esversion": 6,
+    "strict": true, //严格模式 参考文章（http://www.ruanyifeng.com/blog/2013/01/javascript_strict_mode.html）
+    "bitwise": true, //禁止使用位运算符，比如经常把&&写错& 规避此错误
+    "noarg": true, //禁止使用.caller 和 .callee (ECMS5已经禁用了此 可以去掉)
+    "eqeqeq": true, //禁止使用== 和 ！=  强制使用=== 和 ！==
+    "undef": true, //禁止使用不在全局变量列表中的未定义变量
+    "curly": true, //循环或者条件语句必须使用花括号包住
+    "devel": true, //定义用于调试的全局变量：console,alert
+    "jquery": true, //定义全局暴露的jQuery库 （可以去掉）
+    "browser": true, //暴露浏览器属性的全局变量 如window document
+    "evil": true //禁止使用eval （可以去掉）
+}
