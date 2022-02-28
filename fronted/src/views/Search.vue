@@ -5,28 +5,60 @@
         <h2>搜索</h2>
       </el-header>
       <el-main>
-        <el-input v-model="search_word" placeholder="请输入">
-          <template #prefix>
-            <el-icon class="el-input__icon"><search /></el-icon>
-          </template>
-        </el-input>
+        <el-row :gutter="20">
+          <el-col :span="12" :offset="6">
+            <el-input v-model="searchWord" placeholder="请输入">
+              <template #prefix>
+                <el-icon class="el-input__icon"><search /></el-icon>
+              </template>
+            </el-input>
+          </el-col>
+          <el-col :span="2">
+            <el-button :icon="Search" circle @click="search"></el-button>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" v-for="data in searchData" :key="data">
+          <el-col :span="12" :offset="6">
+            <el-card shadow="hover">
+              <div style="padding: 14px">
+                <span> {{ data.name }} </span>
+                <el-button>下载</el-button>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
       </el-main>
     </el-container>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue'
-export default {
-  name: 'SearchBook',
-  components: {
-    Search
-  },
+</script>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { searchFile } from '../api/search'
+import { ElMessage } from 'element-plus'
+
+export default defineComponent({
+  name: 'SearchView',
   data() {
     return {
-      search_word: '',
-      search_data: ''
+      searchWord: '',
+      searchData: JSON
+    }
+  },
+  methods: {
+    search() {
+      searchFile({ filename: this.searchWord })
+        .then(res => {
+          this.searchData = res as JSON
+        })
+        .catch(err => {
+          ElMessage.error('Oops, this is a error message.' + err)
+        })
     }
   }
-}
+})
 </script>
