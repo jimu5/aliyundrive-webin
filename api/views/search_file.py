@@ -10,12 +10,14 @@ async def search_file(request):
     搜索文件
 
     :request param:
-    file_name: [必选] 搜索的文件名
+    filename: [必选] 搜索的文件名
     file_category:[可选] 搜索的文件类型
     """
-    file_name = request.args.get("file_name")
+    filename = request.args.get("filename")
+    if not filename:
+        return json(body={'error': 'param filename'}, status=403)
     file_category = request.args.get("file_category")
-    result = alidrive.search_file(name=file_name, category=file_category)
+    result = alidrive.search_file(name=filename, category=file_category)
     # 处理搜索结果
     result = handle_search_result(result)
     return json(body=result)
