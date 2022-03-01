@@ -68,7 +68,10 @@ export default defineComponent({
     download(file_id: string) {
       getDownloadUrl({ file_id: file_id })
         .then((res: getDownloadRes) => {
-          window.open(res.download_url)
+          window.open(
+            'javascript:window.name;',
+            '<script>location.replace("' + res.download_url + '")<\/script>'
+          )
         })
         .catch((err: getDownloadRes) => {
           ElMessage.error('Oops, this is a error message.' + err)
