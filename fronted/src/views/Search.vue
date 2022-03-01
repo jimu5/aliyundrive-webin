@@ -22,7 +22,7 @@
             <el-card shadow="hover">
               <div style="padding: 14px">
                 <span> {{ data.name }} </span>
-                <el-button>下载</el-button>
+                <el-button @click="download(data.file_id)">下载</el-button>
               </div>
             </el-card>
           </el-col>
@@ -38,7 +38,7 @@ import { Search } from '@element-plus/icons-vue'
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { searchFile } from '../api/search'
+import { searchFile, getDownloadUrl } from '../api/search'
 import { ElMessage } from 'element-plus'
 
 export default defineComponent({
@@ -51,11 +51,25 @@ export default defineComponent({
   },
   methods: {
     search() {
+      if (this.searchWord === '') {
+        ElMessage.error("请输入搜索内容")
+        return
+      }
       searchFile({ filename: this.searchWord })
         .then(res => {
           this.searchData = res as JSON
         })
         .catch(err => {
+          ElMessage.error('Oops, this is a error message.' + err)
+        })
+    },
+
+    download(file_id: string) {
+      getDownloadUrl({ file_id: file_id})
+        .then((res: any) => {
+          window.open(res.download_url)
+        })
+        .catch((err: any) =>{
           ElMessage.error('Oops, this is a error message.' + err)
         })
     }

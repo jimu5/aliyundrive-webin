@@ -6,10 +6,10 @@ export function get(url: string, params: object) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params: params })
-      .then(res => {
+      .then((res: any) => {
         resolve(res.data)
       })
-      .catch(err => {
+      .catch((err: any) => {
         reject(err.data)
       })
   })
