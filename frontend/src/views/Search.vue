@@ -40,6 +40,7 @@ import { Search } from '@element-plus/icons-vue'
 import { defineComponent } from 'vue'
 import { searchFile, getDownloadUrl } from '../api/search'
 import { ElMessage } from 'element-plus'
+import { getDownloadRes } from '../api/types/search'
 
 export default defineComponent({
   name: 'SearchView',
@@ -52,7 +53,7 @@ export default defineComponent({
   methods: {
     search() {
       if (this.searchWord === '') {
-        ElMessage.error("请输入搜索内容")
+        ElMessage.error('请输入搜索内容')
         return
       }
       searchFile({ filename: this.searchWord })
@@ -65,11 +66,11 @@ export default defineComponent({
     },
 
     download(file_id: string) {
-      getDownloadUrl({ file_id: file_id})
-        .then((res: any) => {
+      getDownloadUrl({ file_id: file_id })
+        .then((res: getDownloadRes) => {
           window.open(res.download_url)
         })
-        .catch((err: any) =>{
+        .catch((err: getDownloadRes) => {
           ElMessage.error('Oops, this is a error message.' + err)
         })
     }

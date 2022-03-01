@@ -1,15 +1,16 @@
 import axios from 'axios'
+import { ResponseResult } from './types/base'
 
 axios.defaults.baseURL = 'api/'
 
-export function get(url: string, params: object) {
+export function get(url: string, params: object): Promise<any> {
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params: params })
-      .then((res: any) => {
+      .then((res: ResponseResult) => {
         resolve(res.data)
       })
-      .catch((err: any) => {
+      .catch((err: ResponseResult) => {
         reject(err.data)
       })
   })
