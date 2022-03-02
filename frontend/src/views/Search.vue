@@ -5,7 +5,7 @@
         <h2>搜索</h2>
       </el-header>
       <el-main>
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="margin-bottom: 30px">
           <el-col :span="16" :offset="4">
             <el-input v-model="searchWord" placeholder="请输入">
               <template #prefix>
@@ -17,12 +17,19 @@
             <el-button :icon="Search" circle @click="search"></el-button>
           </el-col>
         </el-row>
-        <el-row :gutter="5" v-for="data in searchData" :key="data">
-          <el-col :span="13" :offset="5">
+        <el-row
+          :gutter="5"
+          v-for="data in searchData"
+          :key="data"
+          style="margin-bottom: 15px"
+        >
+          <el-col :span="20" :offset="2">
             <el-card shadow="hover">
-              <div style="padding: 14px">
+              <div>
                 <span> {{ data.name }} </span>
-                <el-button @click="download(data.file_id)" style="float: right">下载</el-button>
+                <el-button @click="download(data.file_id)" style="float: right"
+                  >下载</el-button
+                >
               </div>
             </el-card>
           </el-col>
@@ -66,14 +73,13 @@ export default defineComponent({
     },
 
     download(file_id: string) {
+      const newWindow: any = window.open('', '_blank')
       getDownloadUrl({ file_id: file_id })
         .then((res: getDownloadRes) => {
-          window.open(
-            'javascript:window.name;',
-            '<script>location.replace("' + res.download_url + '")<\/script>'
-          )
+          newWindow.eval(`location.replace("${res.download_url}")`)
         })
         .catch((err: getDownloadRes) => {
+          newWindow.close()
           ElMessage.error('Oops, this is a error message.' + err)
         })
     }
