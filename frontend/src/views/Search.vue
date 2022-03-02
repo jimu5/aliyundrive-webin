@@ -6,7 +6,7 @@
       </el-header>
       <el-main>
         <el-row :gutter="20">
-          <el-col :span="12" :offset="6">
+          <el-col :span="16" :offset="4">
             <el-input v-model="searchWord" placeholder="请输入">
               <template #prefix>
                 <el-icon class="el-input__icon"><search /></el-icon>
@@ -17,12 +17,12 @@
             <el-button :icon="Search" circle @click="search"></el-button>
           </el-col>
         </el-row>
-        <el-row :gutter="20" v-for="data in searchData" :key="data">
-          <el-col :span="12" :offset="6">
+        <el-row :gutter="5" v-for="data in searchData" :key="data">
+          <el-col :span="13" :offset="5">
             <el-card shadow="hover">
               <div style="padding: 14px">
                 <span> {{ data.name }} </span>
-                <el-button @click="download(data.file_id)">下载</el-button>
+                <el-button @click="download(data.file_id)" style="float: right">下载</el-button>
               </div>
             </el-card>
           </el-col>
