@@ -5,7 +5,7 @@
         <h2>搜索</h2>
       </el-header>
       <el-main>
-        <el-row :gutter="20" style="margin-bottom: 30px">
+        <el-row :gutter="20">
           <el-col :span="16" :offset="4">
             <el-input v-model="searchWord" placeholder="请输入">
               <template #prefix>
@@ -15,6 +15,11 @@
           </el-col>
           <el-col :span="2">
             <el-button v-loading.fullscreen.lock="isLoading" :icon="Search" circle @click="search"></el-button>
+          </el-col>
+        </el-row>
+        <el-row v-if="searchDataCount !== -1" style="margin-bottom: 8px">
+          <el-col :span="20" :offset="2">
+            <p>共计搜索 {{ searchDataCount}} 条数据</p>
           </el-col>
         </el-row>
         <el-row
@@ -55,7 +60,8 @@ export default defineComponent({
     return {
       isLoading: false,
       searchWord: '',
-      searchData: JSON
+      searchData: [],
+      searchDataCount: -1
     }
   },
   methods: {
@@ -66,8 +72,9 @@ export default defineComponent({
       }
       this.isLoading = true
       searchFile({ filename: this.searchWord })
-        .then(res => {
-          this.searchData = res as JSON
+        .then((res: []) => {
+          this.searchData = res
+          this.searchDataCount = this.searchData.length
           this.isLoading = false
         })
         .catch(err => {
