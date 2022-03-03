@@ -14,7 +14,7 @@
             </el-input>
           </el-col>
           <el-col :span="2">
-            <el-button :icon="Search" circle @click="search"></el-button>
+            <el-button v-loading.fullscreen.lock="isLoading" :icon="Search" circle @click="search"></el-button>
           </el-col>
         </el-row>
         <el-row
@@ -53,6 +53,7 @@ export default defineComponent({
   name: 'SearchView',
   data() {
     return {
+      isLoading: false,
       searchWord: '',
       searchData: JSON
     }
@@ -63,11 +64,14 @@ export default defineComponent({
         ElMessage.error('请输入搜索内容')
         return
       }
+      this.isLoading = true
       searchFile({ filename: this.searchWord })
         .then(res => {
           this.searchData = res as JSON
+          this.isLoading = false
         })
         .catch(err => {
+          this.isLoading = false
           ElMessage.error('Oops, this is a error message.' + err)
         })
     },
