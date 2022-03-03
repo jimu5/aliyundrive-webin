@@ -23,13 +23,22 @@ async def search_file(request):
     return json(body=result)
 
 
-def handle_search_result(result: List[BaseFile]) -> list:
+def handle_search_result(result: List[BaseFile], **kwargs) -> list:
+    """处理搜索结果
+    filter_types: [可选] 搜索过滤的文件类型
+    """
     handle_list = []
+    if 'filter_types' in kwargs:
+        does_filter = True
     for file in result:
         file_info = {
             'name': file.name,
             'file_id': file.file_id,
             'type': file.type
         }
+        if does_filter:
+            file_name_split = file.name.split('.')
+            if file_name_split and file_name_split[-1] not in kwargs['filter_types']:
+                continue
         handle_list.append(file_info)
     return handle_list
