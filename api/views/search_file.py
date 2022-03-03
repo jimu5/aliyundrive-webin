@@ -28,8 +28,7 @@ def handle_search_result(result: List[BaseFile], **kwargs) -> list:
     filter_types: [可选] 搜索过滤的文件类型
     """
     handle_list = []
-    if 'filter_types' in kwargs:
-        does_filter = True
+    does_filter = True if 'filter_types' in kwargs else False
     for file in result:
         file_info = {
             'name': file.name,
