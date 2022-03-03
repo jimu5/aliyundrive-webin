@@ -31,7 +31,7 @@
           <el-col :span="20" :offset="2">
             <el-card shadow="hover">
               <div>
-                <span> {{ data.name }} </span>
+                <span class="text item" style="word-break: break-all"> {{ data.name }} </span>
                 <el-button @click="download(data.file_id)" style="float: right"
                   >下载</el-button
                 >
