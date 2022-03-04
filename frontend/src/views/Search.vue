@@ -52,7 +52,7 @@ import { Search } from '@element-plus/icons-vue'
 import { defineComponent } from 'vue'
 import { searchFile, getDownloadUrl } from '../api/search'
 import { ElMessage } from 'element-plus'
-import { getDownloadRes } from '../api/types/search'
+import { getDownloadRes, getSearchResultRes } from '../api/types/search'
 
 export default defineComponent({
   name: 'SearchView',
@@ -72,8 +72,8 @@ export default defineComponent({
       }
       this.isLoading = true
       searchFile({ filename: this.searchWord })
-        .then((res: []) => {
-          this.searchData = res
+        .then((res: getSearchResultRes) => {
+          this.searchData = res.result
           this.searchDataCount = this.searchData.length
           this.isLoading = false
         })
