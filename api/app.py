@@ -1,11 +1,9 @@
 from sanic import Sanic
-from aligo import Aligo
-from sanic_cors import CORS
+from api.base import BaseAligo
 
 
 # 初始化服务
-alidrive = Aligo()
+alidrive = BaseAligo()
 app = Sanic("aliyundrive-webin-api")
 app.static('/', './frontend/dist/index.html')
 app.static('/', './frontend/dist')
-CORS(app)

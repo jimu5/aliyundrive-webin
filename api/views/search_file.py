@@ -1,6 +1,7 @@
 from sanic.response import json
 from typing import List
 from aligo.types import BaseFile
+from aligo.types.Enum import SearchCategory
 
 from ..app import alidrive
 
@@ -14,13 +15,16 @@ async def search_file(request):
     file_category:[可选] 搜索的文件类型
     """
     filename = request.args.get("filename")
+    page_marker = request.args.get("page_marker")
     if not filename:
         return json(body={'error': 'param filename'}, status=403)
     file_category = request.args.get("file_category")
-    result = alidrive.search_file(name=filename, category=file_category)
+    result = alidrive.search_file(name=filename, category=file_category, pagination=True, page_marker=page_marker)
     # 处理搜索结果
+    if isinstance(result[-1], str):
+        next_page_marker = result.pop()
     result = handle_search_result(result)
-    return json(body=result)
+    return json(body={"result": result, "next_page_marker": next_page_marker})
 
 
 def handle_search_result(result: List[BaseFile], **kwargs) -> list:
