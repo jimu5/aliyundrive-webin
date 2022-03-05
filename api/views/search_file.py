@@ -21,6 +21,7 @@ async def search_file(request):
     file_category = request.args.get("file_category")
     result = alidrive.search_file(name=filename, category=file_category, pagination=True, page_marker=page_marker)
     # 处理搜索结果
+    next_page_marker = ''
     if isinstance(result[-1], str):
         next_page_marker = result.pop()
     result = handle_search_result(result)
