@@ -55,6 +55,8 @@
 
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue'
+
+document.title = "搜索"
 </script>
 
 <script lang="ts">
