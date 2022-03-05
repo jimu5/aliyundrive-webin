@@ -22,7 +22,7 @@ async def search_file(request):
     result = alidrive.search_file(name=filename, category=file_category, pagination=True, page_marker=page_marker)
     # 处理搜索结果
     next_page_marker = ''
-    if isinstance(result[-1], str):
+    if result and isinstance(result[-1], str):
         next_page_marker = result.pop()
     result = handle_search_result(result)
     return json(body={"result": result, "next_page_marker": next_page_marker})
