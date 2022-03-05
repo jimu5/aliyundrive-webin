@@ -1,27 +1,31 @@
 <template>
-  <div>
-    <el-container>
-      <el-header>
-        <h2>搜索</h2>
-      </el-header>
-      <el-main>
-        <el-row :gutter="20">
-          <el-col :span="16" :offset="4">
-            <el-input v-model="searchWord" placeholder="请输入">
-              <template #prefix>
-                <el-icon class="el-input__icon"><search /></el-icon>
-              </template>
-            </el-input>
-          </el-col>
-          <el-col :span="2">
-            <el-button v-loading.fullscreen.lock="isLoading" :icon="Search" circle @click="search"></el-button>
-          </el-col>
-        </el-row>
-        <el-row v-if="searchDataCount !== -1" style="margin-bottom: 8px">
-          <el-col :span="20" :offset="2">
-            <p>共计搜索 {{ searchDataCount}} 条数据</p>
-          </el-col>
-        </el-row>
+  <el-container style="height: 95%">
+    <el-header>
+      <h2>搜索</h2>
+    </el-header>
+    <el-main>
+      <el-row :gutter="20" style="margin-bottom: 18px">
+        <el-col :span="16" :offset="4">
+          <el-input v-model="searchWord" placeholder="请输入">
+            <template #prefix>
+              <el-icon class="el-input__icon"><search /></el-icon>
+            </template>
+          </el-input>
+        </el-col>
+        <el-col :span="2">
+          <el-button v-loading.fullscreen.lock="isLoading" :icon="Search" circle @click="search"></el-button>
+        </el-col>
+      </el-row>
+      <el-row v-if="none_result_flag" style="margin-bottom: 8px">
+        <el-col :span="20" :offset="2">
+          <p>未搜索到相关数据</p>
+        </el-col>
+      </el-row>
+      <div
+        v-infinite-scroll="scrollDataLoad"
+        :infinite-scroll-disabled="isLoading || next_page_marker === ''"
+        infinite-scroll-delay="1000"
+      >
         <el-row
           :gutter="5"
           v-for="data in searchData"
@@ -39,9 +43,14 @@
             </el-card>
           </el-col>
         </el-row>
-      </el-main>
-    </el-container>
-  </div>
+        <el-row v-if="next_page_marker !== ''" style="margin-bottom: 8px">
+          <el-col :span="20" :offset="2">
+            <p>...</p>
+          </el-col>
+        </el-row>
+      </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts" setup>
@@ -61,7 +70,9 @@ export default defineComponent({
       isLoading: false,
       searchWord: '',
       searchData: [],
-      searchDataCount: -1
+      next_page_marker: '',
+      none_result_flag: false,
+      times: 3,
     }
   },
   methods: {
@@ -74,8 +85,39 @@ export default defineComponent({
       searchFile({ filename: this.searchWord })
         .then((res: getSearchResultRes) => {
           this.searchData = res.result
-          this.searchDataCount = this.searchData.length
           this.isLoading = false
+          this.next_page_marker = res.next_page_marker
+          if (this.searchData.length === 0) {
+            this.none_result_flag = true
+          } else {
+            this.none_result_flag = false
+          }
+        })
+        .catch(err => {
+          this.isLoading = false
+          ElMessage.error('Oops, this is a error message.' + err)
+        })
+    },
+
+    scrollDataLoad() {
+      if (this.times === 0) {
+        return
+      }
+      this.times -= 1
+      if (this.isLoading) {
+        return
+      }
+      this.isLoading = true
+      searchFile({ filename: this.searchWord, page_marker: this.next_page_marker })
+        .then((res: getSearchResultRes) => {
+          this.searchData.push(...res.result)
+          this.isLoading = false
+          this.next_page_marker = res.next_page_marker
+          if (this.searchData.length === 0) {
+            this.none_result_flag = true
+          } else {
+            this.none_result_flag = false
+          }
         })
         .catch(err => {
           this.isLoading = false
@@ -93,7 +135,7 @@ export default defineComponent({
           newWindow.close()
           ElMessage.error('Oops, this is a error message.' + err)
         })
-    }
+    },
   }
 })
 </script>
