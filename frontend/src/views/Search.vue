@@ -1,10 +1,8 @@
 <template>
   <el-container style="height: 95%">
-    <el-header>
+    <el-header height="115px">
       <h2>搜索</h2>
-    </el-header>
-    <el-main>
-      <el-row :gutter="20" style="margin-bottom: 18px">
+      <el-row :gutter="20">
         <el-col :span="16" :offset="4">
           <el-input v-model="searchWord" placeholder="请输入">
             <template #prefix>
@@ -16,6 +14,8 @@
           <el-button v-loading.fullscreen.lock="isLoading" :icon="Search" circle @click="search"></el-button>
         </el-col>
       </el-row>
+    </el-header>
+    <el-main>
       <el-row v-if="none_result_flag" style="margin-bottom: 8px">
         <el-col :span="20" :offset="2">
           <p>未搜索到相关数据</p>
