@@ -18,3 +18,5 @@ python -m pip install -r requirements.txt
 ```
 python run.py
 ```
+
+会运行在8000端口上`127.0.0.1:8000`
