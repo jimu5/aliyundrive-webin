@@ -4,7 +4,7 @@
       <h2>搜索</h2>
       <el-row :gutter="20">
         <el-col :span="16" :offset="4">
-          <el-input v-model="searchWord" placeholder="请输入">
+          <el-input v-model="searchWord" placeholder="请输入" @keyup.enter="search">
             <template #prefix>
               <el-icon class="el-input__icon"><search /></el-icon>
             </template>
